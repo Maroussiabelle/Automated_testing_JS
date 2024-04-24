@@ -1,0 +1,20 @@
+{
+  "name": "automated_testing_js",
+  "version": "1.0.0",
+  "description": "New branches are created for home tasks:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maroussiabelle/Automated_testing_JS.git"
+  },
+  "keywords": [],
+  "author": "Marija Voroncova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Maroussiabelle/Automated_testing_JS/issues"
+  },
+  "homepage": "https://github.com/Maroussiabelle/Automated_testing_JS#readme"
+}
