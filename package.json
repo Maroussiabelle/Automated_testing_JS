@@ -86,7 +86,6 @@
     "has-symbols": "^1.0.3",
     "has-tostringtag": "^1.0.2",
     "hasown": "^2.0.2",
-    "husky": "^9.0.11",
     "ignore": "^5.3.1",
     "import-fresh": "^3.3.0",
     "imurmurhash": "^0.1.4",
@@ -197,11 +196,14 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
-    "globals": "^15.0.0"
+    "globals": "^15.0.0",
+    "husky": "^9.0.11"
   },
   "scripts": {
-    "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint ./",
+    "test": "mocha",
+    "coverage": "c8 npm test",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "Marija Voroncova",
