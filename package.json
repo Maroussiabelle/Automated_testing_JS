@@ -200,7 +200,7 @@
     "husky": "^9.0.11"
   },
   "scripts": {
-    "lint": "eslint ./",
+    "lint": "eslint ./--fix",
     "test": "mocha",
     "coverage": "c8 npm test",
     "prepare": "husky install"
