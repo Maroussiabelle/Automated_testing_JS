@@ -50,4 +50,86 @@ describe('isNumberEven', function () {
       validator.isNumberEven('4')
     }).to.throw('[4] is not of type "Number" it is of type "string"')
   })
+
+  describe('NumbersValidator', () => {
+    // Test suite for getEvenNumbersFromArray method
+    describe('getEvenNumbersFromArray', () => {
+      // Test case 1: Test with valid input array containing only even numbers
+      it('should return an array of even numbers', () => {
+        const input = [2, 4, 6, 8]
+        const expectedOutput = [2, 4, 6, 8]
+        expect(validator.getEvenNumbersFromArray(input)).to.be.eql(expectedOutput)
+      })
+
+      // Test case 2: Test with valid input array containing a mix of even and odd numbers
+      it('should return an array of even numbers when input contains a mix of even and odd numbers', () => {
+        const input = [1, 2, 3, 4, 5, 6]
+        const expectedOutput = [2, 4, 6]
+        expect(validator.getEvenNumbersFromArray(input)).to.eql(expectedOutput)
+      })
+
+      // Test case 3: Test with an empty array
+      it('should return an empty array for an empty input array', () => {
+        const input = []
+        const expectedOutput = []
+        expect(validator.getEvenNumbersFromArray(input)).to.eql(expectedOutput)
+      })
+
+      // Test case 4: Test with an array containing non-numeric values
+      it('should throw an error for an array containing non-numeric values', () => {
+        const input = [1, '2', 3, 'four', 5]
+        expect(() => validator.getEvenNumbersFromArray(input)).to.throw(/not an array of "Numbers"/)
+      })
+
+      // Test case 5: Test with a non-array input
+      it('should throw an error for a non-array input', () => {
+        const input = 'not an array'
+        expect(() => validator.getEvenNumbersFromArray(input)).to.throw(/not an array of "Numbers"/)
+      })
+    })
+  })
+  describe('isAllNumbers', () => {
+    // Test with an array containing only numbers
+    it('should return true for an array containing only numbers', () => {
+      const validator = new NumbersValidator()
+      const input = [1, 2, 3, 4, 5]
+      expect(validator.isAllNumbers(input)).to.be.equal(true)
+    })
+
+    // Test with an array containing non-number values
+    it('should return false for an array containing non-number values', () => {
+      const validator = new NumbersValidator()
+      const input = [1, '2', 3, 'four', 5]
+      expect(validator.isAllNumbers(input)).to.be.equal(false)
+    })
+
+    // Test with a non-array input
+    it('should throw an error for a non-array input', () => {
+      const validator = new NumbersValidator()
+      const input = 'not an array'
+      expect(() => validator.isAllNumbers(input)).to.throw()
+    })
+  })
+  describe('isInteger', () => {
+    // Test with an integer
+    it('should return true for an integer', () => {
+      const validator = new NumbersValidator()
+      const input = 5
+      expect(validator.isInteger(input)).to.be.equal(true)
+    })
+
+    // Test with a non-integer number
+    it('should return false for a non-integer number', () => {
+      const validator = new NumbersValidator()
+      const input = 5.5
+      expect(validator.isInteger(input)).to.be.equal(false)
+    })
+
+    // Test with a non-number value
+    it('should throw an error for a non-number value', () => {
+      const validator = new NumbersValidator()
+      const input = 'not a number'
+      expect(() => validator.isInteger(input)).to.throw()
+    })
+  })
 })
