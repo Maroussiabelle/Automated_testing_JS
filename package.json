@@ -191,6 +191,10 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.0.2",
     "@eslint/js": "^9.1.1",
+    "@wdio/cli": "^8.36.1",
+    "@wdio/local-runner": "^8.36.1",
+    "@wdio/mocha-framework": "^8.36.1",
+    "@wdio/spec-reporter": "^8.36.1",
     "eslint": "^8.57.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
@@ -200,10 +204,11 @@
     "husky": "^9.0.11"
   },
   "scripts": {
-    "lint": "eslint ./--fix",
+    "lint": "eslint ./ --fix",
     "test": "mocha",
     "coverage": "c8 npm test",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "wdio": "wdio run ./wdio.conf.js"
   },
   "keywords": [],
   "author": "Marija Voroncova",
