@@ -12,7 +12,10 @@ const compat = new FlatCompat({ baseDirectory: __dirname, recommendedConfig: plu
 
 export default [
   {
-    languageOptions: { globals: globals.node }
+    languageOptions: {
+      globals: globals.node,
+      //globals: mocha
+    }
   },
   {
     ignores: [
