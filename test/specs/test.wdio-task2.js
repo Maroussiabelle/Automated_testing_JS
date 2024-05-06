@@ -77,26 +77,4 @@ git push origin master --force
     const codeText = await $('pre').getText()
     expect(codeText).to.equal(code)
   })
-
-//   it('Should verify that title and selected options are as required', async () => {
-//     await browser.url('https://pastebin.com/qnhzZMMJ')
-//
-//     const pageTitle = await browser.getTitle()
-//     expect(pageTitle).to.equal('how to gain dominance among developers - Pastebin.com')
-//
-//     const bashButton = await $('div.top-buttons a.btn.-small.h_800')
-//     const buttonText = await bashButton.getHTML(false)
-//     expect(buttonText).to.equal('Bash')
-//
-//     const rawButton = await $('div.top-buttons .right a.btn.-small')
-//     const rawButtonText = await rawButton.getHTML(false)
-//     expect(rawButtonText).to.equal('raw')
-//     await rawButton.click()
-//     const rawCode = await $('pre')
-//     const codeText = await rawCode.getText()
-//     const expectedCode = `git config --global user.name  "New Sheriff in Town"
-// git reset $(git commit-tree HEAD^{tree} -m "Legacy code")
-// git push origin master --force`
-//     expect(codeText.trim()).to.equal(expectedCode.trim())
-//   })
 })
