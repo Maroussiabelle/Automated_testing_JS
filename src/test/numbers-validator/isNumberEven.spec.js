@@ -3,7 +3,7 @@
 // so we can test its methods.
 
 import { expect } from 'chai'
-import NumbersValidator from '../../app/numbers_validator.js'
+import NumbersValidator from '../../../app/numbers_validator.js'
 
 // Importing functions 'describe', 'beforeEach', 'afterEach' and 'it' from 'mocha' which is a test framework.
 // const { describe, beforeEach, afterEach, it } = require('mocha')
