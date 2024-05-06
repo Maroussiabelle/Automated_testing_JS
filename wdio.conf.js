@@ -21,7 +21,8 @@ export const config = {
   // of the config file unless it's absolute.
   //
   specs: [
-    './test/specs/**/*.js'
+    // './test/specs/**/*.js'
+    './test/specs/test.wdio-task2.js'
   ],
   // Patterns to exclude.
   exclude: [

@@ -208,7 +208,7 @@
     "test": "mocha",
     "coverage": "c8 npm test",
     "prepare": "husky install",
-    "wdio": "wdio run ./wdio.conf.js"
+    "wdio": "wdio run wdio.conf.js"
   },
   "keywords": [],
   "author": "Marija Voroncova",

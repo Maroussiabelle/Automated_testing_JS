@@ -10,6 +10,7 @@ async function closeCookiesPopUp () {
   await $('button[mode="primary"]').click()
 }
 
+// login and password for launching in Firefox (learned how to create login and password and store them in .env file)
 // async function login (login, password) {
 //   await $('a.btn-sign.sign-in').click()
 //   await $('#loginform-username').setValue(login)
