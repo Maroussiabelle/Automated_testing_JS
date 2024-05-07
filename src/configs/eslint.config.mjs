@@ -21,7 +21,8 @@ export default [
     ignores: [
       'mochawesome-report',
       'node_modules',
-      'coverage'
+      'coverage',
+      'src/configs',
     ]
   },
   ...compat.extends('standard')

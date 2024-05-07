@@ -1,4 +1,7 @@
 import { $, browser } from '@wdio/globals'
+import StartPage from '../../google_cloud/pages/startPage.js'
+
+const googleStartPage = new StartPage()
 
 async function setMachineType (model) {
   const selectMachineDropdown = $('div[jsname="kgDJk"]')
@@ -14,10 +17,11 @@ async function clickGPUSwitch () {
 }
 
 describe('WebDriver Task 3 suite', () => {
+  beforeEach(async () => {
+    await googleStartPage.open()
+  })
+
   it('Should open Google Cloud, search for "Google Cloud Platform Pricing Calculator, set properties and send price estimate to email', async () => {
-    await browser.url(
-      'https://cloud.google.com/'
-    )
     const searchIcon = await $('input.mb2a7b')
     await searchIcon.click()
 
@@ -33,15 +37,13 @@ describe('WebDriver Task 3 suite', () => {
     await $('div.gs-title > a.gs-title > b').click()
     await $('span.UywwFc-vQzf8d[jsname="V67aGc"]').click()
     await $('h2.honxjf').click()
-    await $('.glue-cookie-notification-bar__accept').click()
     await $('input[jsname="YPqjbf"]').click()
-    // await browser.pause(3000)
     await browser.keys(['Backspace', '4'])
-    // await browser.pause(3000)
     // // await browser.scroll(0, 700)
     await setMachineType('n1-standard-8')
     await clickGPUSwitch()
-    await browser.debug()
+
+    // await browser.debug()
     // const addGPUsSwitch = $('button[aria-label="Add GPUs"]')
     // await addGPUsSwitch.scrollIntoView({ block: 'center' })
     // await addGPUsSwitch.click()
