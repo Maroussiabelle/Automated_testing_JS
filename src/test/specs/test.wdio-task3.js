@@ -1,112 +1,125 @@
-import { $, browser } from '@wdio/globals'
-import StartPage from '../../google_cloud/pages/startPage.js'
+import { browser } from '@wdio/globals'
+import GoogleCloudHomePage from '../../google_cloud/pages/homePage.js'
 import { expect } from 'chai'
+import GoogleCloudSearchResultsPage from "../../google_cloud/pages/searchResultsPage.js";
+import GoogleCloudWelcomeToCalculatorPage from "../../google_cloud/pages/welcomeToCalculatorPage.js";
+import GoogleCloudCalculatorFormPage from "../../google_cloud/pages/calculatorFormPage.js";
+import GoogleCloudEstimateSummaryPage from "../../google_cloud/pages/estimateSummaryPage.js";
 
-const googleStartPage = new StartPage()
+const googleCloudStartPage = new GoogleCloudHomePage()
+const googleCloudSearchResultsPage = new GoogleCloudSearchResultsPage()
+const googleCloudWelcomeToCalculatorPage = new GoogleCloudWelcomeToCalculatorPage()
+const googleCloudCalculatorFormPage = new GoogleCloudCalculatorFormPage()
+const googleCloudEstimateSummaryPage = new GoogleCloudEstimateSummaryPage()
 
-async function clickSearchIcon () {
-  await $('input.mb2a7b').click()
-}
-
-async function waitForSearchInputFieldDisplayed () {
-  await $('input[name="q"]').waitForDisplayed()
-}
-async function searchforItem (searchItem) {
-  await $('input[name="q"]').setValue(searchItem)
+async function searchForItem (searchItem) {
+  await googleCloudStartPage.header.inputBox.setValue(searchItem)
   await browser.keys(['Enter'])
 }
 
-async function clickFirstSearchResult () {
-  await $('//a[@class="gs-title"]/b[text()="Google Cloud Pricing Calculator"]').click()
+async function clickFirstSearchResult (searchResultTitle) {
+  await googleCloudSearchResultsPage.searchResultsContainer.searchResult(searchResultTitle).click()
 }
 
 async function clickAddToEstimateButton () {
-  await $('span.UywwFc-vQzf8d[jsname="V67aGc"]').click()
+  await googleCloudWelcomeToCalculatorPage.welcomeToCalculatorComponent.addToEstimateButton.click()
 }
 
 async function clickComputeEngine () {
-  await $('//h2[text()="Compute Engine"]').click()
+  await googleCloudWelcomeToCalculatorPage.addToEstimateDialog.computeEngineCard.click()
 }
 
 async function setNumberOfInstances (numberOfInstances) {
-  await $('//div[contains(text(), "Number of Instances") and string-length() > 19]/ancestor::div[@class="QiFlid"]//input[@type="number"]')
-    .click()
+  await googleCloudCalculatorFormPage.computeEngineForm.numberOfInstancesInput.click()
   await browser.keys(['Backspace', `${numberOfInstances}`])
 }
 
 async function setMachineType (model) {
-  const selectMachineDropdown = $('div[jsname="kgDJk"]')
-  await selectMachineDropdown.scrollIntoView({ block: 'center' })
-  await selectMachineDropdown.click()
-  await $(`li[data-value='${model}']`).click()
+  await googleCloudCalculatorFormPage.computeEngineForm.selectMachineDropdown.click()
+  await googleCloudCalculatorFormPage.computeEngineForm.machineModelOption(model).click()
 }
 
 async function clickGPUSwitch () {
-  const addGPUsSwitch = $('button[aria-label="Add GPUs"]')
-  await addGPUsSwitch.scrollIntoView({ block: 'center' })
-  await addGPUsSwitch.click()
+  await googleCloudCalculatorFormPage.computeEngineForm.gpuSwitch.click()
 }
 
 async function selectGPUModel (gpuModel) {
-  const selectGPU = $('//span[text()="GPU Model"]/ancestor::div[contains(@class, "O1htCb-H9tDt")]')
-  await selectGPU.click()
-  await $(`//span[@jsname="K4r5Ff" and text()="${gpuModel}"]/ancestor::li`).click()
+  await googleCloudCalculatorFormPage.computeEngineForm.gpuModelDropdown.click()
+  await googleCloudCalculatorFormPage.computeEngineForm.gpuModelOption(gpuModel).click()
+}
+
+async function selectLocalSSD (ssdType) {
+  await googleCloudCalculatorFormPage.computeEngineForm.localSSDDropdown.click()
+  await googleCloudCalculatorFormPage.computeEngineForm.ssdTypeOption(ssdType).click()
 }
 
 async function selectRegion (region) {
-  const selectGPU = $('//span[text()="Region"]/ancestor::div[contains(@class, "O1htCb-H9tDt")]')
-  await selectGPU.click()
-  await $(`//span[text()="${region}"]/ancestor::li`).click()
+  await googleCloudCalculatorFormPage.computeEngineForm.regionDropdown.click()
+  await googleCloudCalculatorFormPage.computeEngineForm.regionOption(region).click()
 }
 
 async function commitedUsage (period) {
-  await $(`label.zT2df[for="${period}"]`).click()
+  await googleCloudCalculatorFormPage.computeEngineForm.commitedUsageLabel(period).click()
+}
+
+async function waitForPriceRecalculation() {
+  await googleCloudCalculatorFormPage.computeEngineForm.serviceCostUpdatedComponent.waitForDisplayed()
 }
 
 async function clickShare () {
-  const shareButton = await $('span[jsname="V67aGc"].FOBRw-vQzf8d')
-  await shareButton.scrollIntoView({ block: 'center' })
-  await shareButton.click()
+  await googleCloudCalculatorFormPage.costDetailsComponent.shareButton.click()
 }
 
 async function openEstimateSummaryInNewTab () {
-  await $('//a[text()="Open estimate summary"]').click()
+  await googleCloudCalculatorFormPage.googleCloudEstimateShareDialog.openEstimateSummaryLink.click()
 }
 describe('WebDriver Task 3 suite', () => {
   beforeEach(async () => {
-    await googleStartPage.open()
+    await googleCloudStartPage.open()
   })
 
   it('Should open Google Cloud, search for "Google Cloud Platform Pricing Calculator, set properties and send price estimate to email', async () => {
-    await clickSearchIcon()
-    await waitForSearchInputFieldDisplayed()
-    await searchforItem('Google Cloud Platform Pricing Calculator')
-    await clickFirstSearchResult()
+    await googleCloudStartPage.header.icon.click()
+    await searchForItem('Google Cloud Platform Pricing Calculator')
+    await clickFirstSearchResult('Google Cloud Pricing Calculator')
     await clickAddToEstimateButton()
     await clickComputeEngine()
     await setNumberOfInstances(4)
     await setMachineType('n1-standard-8')
     await clickGPUSwitch()
     await selectGPUModel('NVIDIA Tesla V100')
+    await selectLocalSSD('2x375 GB')
     await selectRegion('Netherlands (europe-west4)')
-    await commitedUsage('1-year')
-    await browser.pause(1000)
-    const sumOnFormTab = await $('.gt0C8e.MyvX5d.D0aEmf').getHTML(false)
+    await commitedUsage('1 year')
+    await waitForPriceRecalculation()
+    const sumOnFormTab = await googleCloudCalculatorFormPage.costDetailsComponent.estimatedCostLabel.getHTML(false)
     await clickShare()
     await openEstimateSummaryInNewTab()
 
     await browser.switchWindow('Google Cloud Estimate Summary')
 
-    const sumOnSummaryTab = await $('.n8xu5.Nh2Phe.D0aEmf').getHTML(false)
-    const numberOfInstances = await $('//span[text()="Number of Instances"]/parent::span/span[@class="Kfvdz"]')
-      .getHTML(false)
-    const machineType = await $('//span[text()="Machine type"]/parent::span/span[@class="Kfvdz"]')
-      .getHTML(false)
-    const gpuModel = await $('//span[text()="GPU Model"]/parent::span/span[@class="Kfvdz"]')
-      .getHTML(false)
+    const sumOnSummaryTab = await googleCloudEstimateSummaryPage.totalEstimatedCostComponent.totalCost.getHTML(false)
+    const machineType = await googleCloudEstimateSummaryPage.costEstimateSummaryComponent.machineType.getHTML(false)
+    const gpuModel = await googleCloudEstimateSummaryPage.costEstimateSummaryComponent.gpuModel.getHTML(false)
+    const numberOfGPUS = await googleCloudEstimateSummaryPage.costEstimateSummaryComponent.numberOfGPUS.getHTML(false)
+    const localSSD = await googleCloudEstimateSummaryPage.costEstimateSummaryComponent.localSSD.getHTML(false)
+    const numberOfInstances = await googleCloudEstimateSummaryPage.costEstimateSummaryComponent.numberOfInstances.getHTML(false)
+    const operatingSystem = await googleCloudEstimateSummaryPage.costEstimateSummaryComponent.operatingSystem.getHTML(false)
+    const provisioningModel = await googleCloudEstimateSummaryPage.costEstimateSummaryComponent.provisioningModel.getHTML(false)
+    const addGPUS = await googleCloudEstimateSummaryPage.costEstimateSummaryComponent.addGPUS.getHTML(false)
+    const region = await googleCloudEstimateSummaryPage.costEstimateSummaryComponent.region.getHTML(false)
+    const commitedUse = await googleCloudEstimateSummaryPage.costEstimateSummaryComponent.commitedUse.getHTML(false)
+
     expect(sumOnFormTab).to.equal(sumOnSummaryTab)
-    expect(numberOfInstances).to.equal('4')
     expect(machineType.startsWith('n1-standard-8')).to.be.true
     expect(gpuModel).to.equal('NVIDIA Tesla V100')
+    expect(numberOfGPUS).to.equal('1')
+    expect(localSSD).to.equal('2x375 GB')
+    expect(numberOfInstances).to.equal('4')
+    expect(operatingSystem).to.equal('Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)')
+    expect(provisioningModel).to.equal('Regular')
+    expect(addGPUS).to.equal('true')
+    expect(region).to.equal('Netherlands (europe-west4)')
+    expect(commitedUse).to.equal('1 year')
   })
 })

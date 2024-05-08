@@ -1,6 +1,11 @@
 import { browser } from '@wdio/globals'
+import GoogleCloudHeader from '../components/header.js'
 
-export class StartPage {
+class GoogleCloudHomePage {
+  constructor () {
+    this.header = new GoogleCloudHeader()
+  }
+
   async open () {
     await browser.url('https://cloud.google.com/')
     await browser.execute(() =>
@@ -12,4 +17,4 @@ export class StartPage {
   }
 }
 
-export default StartPage
+export default GoogleCloudHomePage
