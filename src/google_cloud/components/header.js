@@ -1,8 +1,8 @@
-import { $ } from '@wdio/globals'
+import BaseComponent from './baseComponent.js'
 
-export default class GoogleCloudHeader {
-  get rootEl () {
-    return $('header')
+export default class GoogleCloudHeader extends BaseComponent {
+  constructor () {
+    super('header')
   }
 
   get icon () {

@@ -1,11 +1,11 @@
-import {$} from "@wdio/globals";
+import BaseComponent from './baseComponent.js'
 
-export default class GoogleCloudTotalEstimatedCostComponent {
-    get rootEl () {
-        return $('div.MQQvHd')
-    }
+export default class GoogleCloudTotalEstimatedCostComponent extends BaseComponent {
+  constructor () {
+    super('div.MQQvHd')
+  }
 
-    get totalCost() {
-        return this.rootEl.$('.n8xu5.Nh2Phe.D0aEmf')
-    }
+  get totalCost () {
+    return this.rootEl.$('.n8xu5.Nh2Phe.D0aEmf')
+  }
 }

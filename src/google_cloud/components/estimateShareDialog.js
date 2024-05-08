@@ -1,11 +1,11 @@
-import {$} from "@wdio/globals";
+import BaseComponent from './baseComponent.js'
 
-export default class GoogleCloudEstimateShareDialog {
-    get rootEl () {
-        return $('div.bwApif-P5QLlc[role="dialog"]')
-    }
+export default class GoogleCloudEstimateShareDialog extends BaseComponent {
+  constructor () {
+    super('div.bwApif-P5QLlc[role="dialog"]')
+  }
 
-    get openEstimateSummaryLink() {
-        return this.rootEl.$('//a[text()="Open estimate summary"]')
-    }
+  get openEstimateSummaryLink () {
+    return this.rootEl.$('//a[text()="Open estimate summary"]')
+  }
 }

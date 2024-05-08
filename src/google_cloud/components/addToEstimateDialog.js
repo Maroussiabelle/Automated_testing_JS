@@ -1,11 +1,11 @@
-import {$} from "@wdio/globals";
+import BaseComponent from './baseComponent.js'
 
-export default class GoogleCloudAddToEstimateDialog {
-    get rootEl () {
-        return $('div.bwApif-P5QLlc[role="dialog"]')
-    }
+export default class GoogleCloudAddToEstimateDialog extends BaseComponent {
+  constructor () {
+    super('div.bwApif-P5QLlc[role="dialog"]')
+  }
 
-    get computeEngineCard(){
-        return this.rootEl.$('//h2[text()="Compute Engine"]/ancestor::div[@class="VobRQb"]')
-    }
+  get computeEngineCard () {
+    return this.rootEl.$('//h2[text()="Compute Engine"]/ancestor::div[@class="VobRQb"]')
+  }
 }

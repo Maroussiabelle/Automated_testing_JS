@@ -1,13 +1,14 @@
 import { browser } from '@wdio/globals'
 import GoogleCloudHeader from '../components/header.js'
+import BasePage from './basePage.js'
 
-class GoogleCloudHomePage {
+class GoogleCloudHomePage extends BasePage {
   constructor () {
+    super('')
     this.header = new GoogleCloudHeader()
   }
 
-  async open () {
-    await browser.url('https://cloud.google.com/')
+  async setCookiesLocalStorageItem () {
     await browser.execute(() =>
       localStorage.setItem(
         'glue.CookieNotificationBar',

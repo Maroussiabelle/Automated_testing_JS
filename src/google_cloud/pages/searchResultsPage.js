@@ -1,4 +1,4 @@
-import GoogleCloudSearchResultsContainer from "../components/searchResultsContainer.js";
+import GoogleCloudSearchResultsContainer from '../components/searchResultsContainer.js'
 
 export default class GoogleCloudSearchResultsPage {
   constructor () {
