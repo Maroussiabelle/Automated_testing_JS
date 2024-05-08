@@ -30,12 +30,6 @@ async function clickLanguageDropdownAndSelect (language) {
   await $(`//li[text()='${language}']`).click()
 }
 
-async function assertPageTitle () {
-  const pageTitle = await browser.getTitle()
-  expect(['how to gain dominance among developers - Pastebin.com', 'Pastebin.com - #1 paste tool since 2002!'])
-    .to.include(pageTitle)
-}
-
 async function clickCreateNewPasteButton () {
   await browser.scroll(0, 500)
   await $('//button[@type="submit" and text()="Create New Paste"]').click()
@@ -60,11 +54,13 @@ git push origin master --force
     await selectExpiration('10 Minutes')
     await pasteTitle('how to gain dominance among developers')
     await clickCreateNewPasteButton()
-    await assertPageTitle()
+    const pageTitle = await browser.getTitle()
     const bashButtonText = await $('.top-buttons .left a.btn').getHTML(false)
     await clickRawButton()
     const codeText = await $('pre').getText()
 
+    expect(['how to gain dominance among developers - Pastebin.com', 'Pastebin.com - #1 paste tool since 2002!'])
+      .to.include(pageTitle)
     expect(bashButtonText).to.equal('Bash')
     expect(codeText).to.equal(code)
   })
