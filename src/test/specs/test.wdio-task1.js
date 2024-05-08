@@ -1,32 +1,66 @@
 import { $, browser } from '@wdio/globals'
 
+async function openWebpage (url) {
+  await browser.url(url)
+}
+
+async function tryCloseCookiesPopUp () {
+  try {
+    await $('button[mode="primary"]').click()
+  } catch (ignored) {}
+}
+
 async function tryCloseGoogleAd(){
   try {
     await $('vli.vliIgnore').click()
-  } catch(ignored) {
+  } catch(ignored) {}
+}
+
+async function pasteTextToForm (text) {
+  try {
+    await clickTextAreaAndPasteText(text)
+  } catch (e) {
+    await tryCloseGoogleAd()
+    await clickTextAreaAndPasteText(text)
   }
+}
+
+async function clickTextAreaAndPasteText (text) {
+  await $('//span[text()="paste"]').click()
+  await $('textarea#postform-text').setValue(text)
+}
+
+async function selectExpiration (expiration) {
+  try {
+    await clickExpirationAndSelect(expiration)
+  } catch (e) {
+    await tryCloseGoogleAd()
+    await clickExpirationAndSelect(expiration)
+  }
+}
+
+async function clickExpirationAndSelect (expiration) {
+  await $('span#select2-postform-expiration-container').click()
+  await $(`//li[text()='${expiration}']`).click()
+}
+
+async function pasteTitle (title) {
+  await $('input#postform-name').setValue(title)
+}
+
+async function clickNewPaste () {
+  await $('button[type="submit"]').click()
 }
 
 describe('WebDriver Task 1 suite', () => {
   it('Should open webpage and create new paste with given attributes', async () => {
-    await browser.url(
-      'https://pastebin.com/'
-    )
-    await $('div#qc-cmp2-ui button[mode="primary"]').click()
+    await openWebpage('https://pastebin.com/')
+    await tryCloseCookiesPopUp()
     await tryCloseGoogleAd()
-    // Write code: "Hello from WebDriver"
-    const textArea = await $('textarea#postform-text')
-    await textArea.setValue('Hello from WebDriver')
-    // Paste Expiration: "10 Minutes"
+    await pasteTextToForm('Hello from WebDriver')
     await browser.execute(() => window.scrollTo({top: 500, behavior: 'smooth'}))
-    const pasteExpirationSelectSpan = await $('span#select2-postform-expiration-container')
-    await pasteExpirationSelectSpan.click()
-    const option10M = await $("//li[text()='10 Minutes']")
-    await option10M.click()
-    // Paste Name / Title: "helloweb"
-    const pasteNameTitle = await $('input#postform-name')
-    await pasteNameTitle.setValue('helloweb')
-    const createNewPasteButton = await $('button[type="submit"]')
-    await createNewPasteButton.click()
+    await selectExpiration('10 Minutes')
+    await pasteTitle('helloweb')
+    await clickNewPaste()
   })
 })
