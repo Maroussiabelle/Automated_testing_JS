@@ -69,7 +69,7 @@ describe('WebDriver Task 3 suite', () => {
     await pages('start').setCookiesLocalStorageItem()
   })
 
-  it('Should open Google Cloud, search for "Google Cloud Platform Pricing Calculator, set properties and send price estimate to email', async () => {
+  it('Should open Google Cloud, search for "Google Cloud Platform Pricing Calculator, set properties and verify summary', async () => {
     await pages('start').header.icon.click()
     await searchForItem('Google Cloud Platform Pricing Calculator')
     await clickFirstSearchResult('Google Cloud Pricing Calculator')
