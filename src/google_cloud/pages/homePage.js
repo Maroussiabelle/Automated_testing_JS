@@ -4,7 +4,7 @@ import BasePage from './basePage.js'
 
 class GoogleCloudHomePage extends BasePage {
   constructor () {
-    super('')
+    super('https://cloud.google.com/')
     this.header = new GoogleCloudHeader()
   }
 
