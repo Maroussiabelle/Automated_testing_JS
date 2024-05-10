@@ -4,9 +4,11 @@ export async function openWebpage (url) {
   await browser.url(url)
 }
 
-export async function tryCloseCookiesPopUp () {
+export async function tryCloseConsentPopUp () {
   try {
-    await $('button[mode="primary"]').click()
+    await $('//button[@mode="secondary"]/span[text()="MORE OPTIONS"]').click()
+    await $('//button[text()="REJECT ALL"]').click()
+    await $('//div[@class="qc-cmp2-buttons-desktop"]//button[@mode="primary" and text()="SAVE & EXIT"]').click()
   } catch (ignored) {}
 }
 

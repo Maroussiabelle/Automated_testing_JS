@@ -4,7 +4,7 @@ import {
   openWebpage,
   pasteTextToForm,
   pasteTitle, selectExpiration,
-  tryCloseCookiesPopUp,
+  tryCloseConsentPopUp,
   tryCloseGoogleAd
 } from '../utils/pasteBinUtils.js'
 
@@ -42,7 +42,7 @@ async function clickRawButton () {
 describe('WebDriver task 2 suite', () => {
   it('Should open a webpage, paste text and select from dropdowns, verify input', async () => {
     await openWebpage('https://pastebin.com/')
-    await tryCloseCookiesPopUp()
+    await tryCloseConsentPopUp()
     await tryCloseGoogleAd()
     const code = `
 git config --global user.name  "New Sheriff in Town"
