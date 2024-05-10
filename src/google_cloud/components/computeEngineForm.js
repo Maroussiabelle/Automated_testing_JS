@@ -41,6 +41,10 @@ export default class GoogleCloudComputeEngineForm extends BaseComponent {
     return this.rootEl.$('//span[text()="Region"]/ancestor::div[contains(@class, "O1htCb-H9tDt")]')
   }
 
+  selectedRegion (region) {
+    return this.rootEl.$(`//span[@class="VfPpkd-uusGie-fmcmS" and contains(text(), "${region}")]`)
+  }
+
   regionOption (region) {
     return this.regionDropdown.$(`//span[text()="${region}"]/ancestor::li`)
   }

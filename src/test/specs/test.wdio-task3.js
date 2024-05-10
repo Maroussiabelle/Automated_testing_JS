@@ -1,6 +1,8 @@
 import { browser } from '@wdio/globals'
 import { expect } from 'chai'
 import { pages } from '../../google_cloud/pages/index.js'
+import { CHEAP_ENGINE_DATA } from '../data/cheap-compute-engine-data.js'
+import { EXPENSIVE_ENGINE_DATA } from '../data/expensive-compute-engine-data.js'
 
 async function searchForItem (searchItem) {
   await pages('start').header.inputBox.setValue(searchItem)
@@ -46,6 +48,7 @@ async function selectLocalSSD (ssdType) {
 async function selectRegion (region) {
   await pages('calculatorForm').computeEngineForm.regionDropdown.click()
   await pages('calculatorForm').computeEngineForm.regionOption(region).click()
+  await pages('calculatorForm').computeEngineForm.selectedRegion(region).waitForDisplayed()
 }
 
 async function commitedUsage (period) {
@@ -69,48 +72,82 @@ describe('WebDriver Task 3 suite', () => {
     await pages('start').setCookiesLocalStorageItem()
   })
 
-  it('Should open Google Cloud, search for "Google Cloud Platform Pricing Calculator, set properties and verify summary', async () => {
+  it('Should calculate Google Cloud cost - cheap engine', async () => {
+    const sumOnFormTab = await fillForm(CHEAP_ENGINE_DATA)
+    await browser.switchWindow('Google Cloud Estimate Summary')
+
+    const actualSummaryData = await getActualSummaryData(CHEAP_ENGINE_DATA)
+
+    assertSummaryData(CHEAP_ENGINE_DATA, { ...actualSummaryData, sumOnFormTab })
+  })
+
+  it('Should calculate Google Cloud cost - expensive engine', async () => {
+    const sumOnFormTab = await fillForm(EXPENSIVE_ENGINE_DATA)
+    await browser.switchWindow('Google Cloud Estimate Summary')
+
+    const actualSummaryData = await getActualSummaryData(EXPENSIVE_ENGINE_DATA)
+
+    assertSummaryData(EXPENSIVE_ENGINE_DATA, { ...actualSummaryData, sumOnFormTab })
+  })
+
+  async function fillForm (inputData) {
     await pages('start').header.icon.click()
     await searchForItem('Google Cloud Platform Pricing Calculator')
     await clickFirstSearchResult('Google Cloud Pricing Calculator')
     await clickAddToEstimateButton()
     await clickComputeEngine()
-    await setNumberOfInstances(4)
-    await setMachineType('n1-standard-8')
-    await clickGPUSwitch()
-    await selectGPUModel('NVIDIA Tesla V100')
-    await selectLocalSSD('2x375 GB')
-    await selectRegion('Netherlands (europe-west4)')
-    await commitedUsage('1 year')
+    await setNumberOfInstances(inputData.numberOfInstances)
+    await setMachineType(inputData.machineType)
+    if (inputData.addGPUs === 'true') {
+      await clickGPUSwitch()
+      await selectGPUModel(inputData.gpuModel)
+    }
+    await selectLocalSSD(inputData.localSSD)
+    await selectRegion(inputData.region)
+    await commitedUsage(inputData.commitedUse)
     await waitForPriceRecalculation()
-    const sumOnFormTab = await pages('calculatorForm').costDetailsComponent.estimatedCostLabel.getHTML(false)
+    const sumOnFormTab = await pages('calculatorForm').costDetailsComponent.estimatedCostLabel.getText()
     await clickShare()
     await openEstimateSummaryInNewTab()
 
-    await browser.switchWindow('Google Cloud Estimate Summary')
+    return sumOnFormTab
+  }
 
-    const sumOnSummaryTab = await pages('estimateSummary').totalEstimatedCostComponent.totalCost.getHTML(false)
-    const machineType = await pages('estimateSummary').costEstimateSummaryComponent.summaryData('machineType').getHTML(false)
-    const gpuModel = await pages('estimateSummary').costEstimateSummaryComponent.summaryData('gpuModel').getHTML(false)
-    const numberOfGPUS = await pages('estimateSummary').costEstimateSummaryComponent.summaryData('numberOfGPUS').getHTML(false)
-    const localSSD = await pages('estimateSummary').costEstimateSummaryComponent.summaryData('localSSD').getHTML(false)
-    const numberOfInstances = await pages('estimateSummary').costEstimateSummaryComponent.summaryData('numberOfInstances').getHTML(false)
-    const operatingSystem = await pages('estimateSummary').costEstimateSummaryComponent.summaryData('operatingSystem').getHTML(false)
-    const provisioningModel = await pages('estimateSummary').costEstimateSummaryComponent.summaryData('provisioningModel').getHTML(false)
-    const addGPUS = await pages('estimateSummary').costEstimateSummaryComponent.summaryData('addGPUS').getHTML(false)
-    const region = await pages('estimateSummary').costEstimateSummaryComponent.summaryData('region').getHTML(false)
-    const commitedUse = await pages('estimateSummary').costEstimateSummaryComponent.summaryData('commitedUse').getHTML(false)
+  async function getActualSummaryData (inputData) {
+    const result = {
+      sumOnSummaryTab: await pages('estimateSummary').totalEstimatedCostComponent.totalCost.getText(),
+      machineType: await pages('estimateSummary').costEstimateSummaryComponent.summaryData('machineType').getText(),
+      localSSD: await pages('estimateSummary').costEstimateSummaryComponent.summaryData('localSSD').getText(),
+      numberOfInstances: await pages('estimateSummary').costEstimateSummaryComponent.summaryData('numberOfInstances').getText(),
+      operatingSystem: await pages('estimateSummary').costEstimateSummaryComponent.summaryData('operatingSystem').getText(),
+      provisioningModel: await pages('estimateSummary').costEstimateSummaryComponent.summaryData('provisioningModel').getText(),
+      addGPUS: await pages('estimateSummary').costEstimateSummaryComponent.summaryData('addGPUS').getText(),
+      region: await pages('estimateSummary').costEstimateSummaryComponent.summaryData('region').getText(),
+      commitedUse: await pages('estimateSummary').costEstimateSummaryComponent.summaryData('commitedUse').getText()
+    }
+    if (inputData.addGPUs !== 'true') {
+      return result
+    }
 
-    expect(sumOnFormTab).to.equal(sumOnSummaryTab)
-    expect(machineType.startsWith('n1-standard-8')).to.be.true
-    expect(gpuModel).to.equal('NVIDIA Tesla V100')
-    expect(numberOfGPUS).to.equal('1')
-    expect(localSSD).to.equal('2x375 GB')
-    expect(numberOfInstances).to.equal('4')
-    expect(operatingSystem).to.equal('Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)')
-    expect(provisioningModel).to.equal('Regular')
-    expect(addGPUS).to.equal('true')
-    expect(region).to.equal('Netherlands (europe-west4)')
-    expect(commitedUse).to.equal('1 year')
-  })
+    return {
+      ...result,
+      gpuModel: await pages('estimateSummary').costEstimateSummaryComponent.summaryData('gpuModel').getText(),
+      numberOfGPUS: await pages('estimateSummary').costEstimateSummaryComponent.summaryData('numberOfGPUS').getText()
+    }
+  }
+
+  function assertSummaryData (inputData, actualData) {
+    expect(actualData.sumOnSummaryTab).to.equal(inputData.totalCostPermonth)
+    expect(actualData.sumOnSummaryTab).to.equal(actualData.sumOnFormTab)
+    expect(actualData.machineType.startsWith(inputData.machineType)).to.be.true
+    expect(actualData.gpuModel).to.equal(inputData.gpuModel)
+    expect(actualData.numberOfGPUS).to.equal(inputData.numberOfGPUS)
+    expect(actualData.localSSD).to.equal(inputData.localSSD)
+    expect(actualData.numberOfInstances).to.equal(inputData.numberOfInstances)
+    expect(actualData.operatingSystem).to.equal(inputData.operatingSystem)
+    expect(actualData.provisioningModel).to.equal(inputData.provisioningModel)
+    expect(actualData.addGPUS).to.equal(inputData.addGPUs)
+    expect(actualData.region).to.equal(inputData.region)
+    expect(actualData.commitedUse).to.equal(inputData.commitedUse)
+  }
 })
