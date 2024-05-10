@@ -7,5 +7,5 @@ export const CHEAP_ENGINE_DATA = {
   provisioningModel: 'Regular',
   region: 'Iowa (us-central1)',
   commitedUse: '3 years',
-  totalCostPermonth: '$75.92'
+  totalCostPerMonth: '$75.92'
 }

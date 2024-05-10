@@ -23,6 +23,8 @@ export default [
       'node_modules',
       'coverage',
       'src/configs',
+      'allure-results',
+      'allure-report'
     ]
   },
   ...compat.extends('standard')

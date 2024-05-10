@@ -143,7 +143,7 @@ describe('WebDriver Task 3 suite', () => {
   }
 
   function assertSummaryData (inputData, actualData) {
-    expect(actualData.sumOnSummaryTab).to.equal(inputData.totalCostPermonth)
+    expect(actualData.sumOnSummaryTab).to.equal(inputData.totalCostPerMonth)
     expect(actualData.sumOnSummaryTab).to.equal(actualData.sumOnFormTab)
     expect(actualData.machineType.startsWith(inputData.machineType)).to.be.true
     expect(actualData.gpuModel).to.equal(inputData.gpuModel)

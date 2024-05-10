@@ -189,6 +189,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.0.2",
     "@eslint/js": "^9.1.1",
+    "@wdio/allure-reporter": "^8.36.1",
     "@wdio/cli": "^8.36.1",
     "@wdio/local-runner": "^8.36.1",
     "@wdio/mocha-framework": "^8.36.1",
@@ -206,7 +207,8 @@
     "task1": "wdio run src/configs/wdio.conf.js --spec src/test/specs/test.wdio-task1.js",
     "task2": "wdio run src/configs/wdio.conf.js --spec src/test/specs/test.wdio-task2.js",
     "task3": "wdio run src/configs/wdio.conf.js --spec src/test/specs/test.wdio-task3.js",
-    "test:ui:wdio:smoke": "wdio run src/configs/wdio.conf.js --mochaOpts.grep '@smoke'"
+    "test:ui:wdio:smoke": "wdio run src/configs/wdio.conf.js --mochaOpts.grep '@smoke'",
+    "allure-report": "allure generate allure-results --clean && allure open"
   },
   "keywords": [],
   "author": "Marija Voroncova",

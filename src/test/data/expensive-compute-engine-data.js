@@ -9,5 +9,5 @@ export const EXPENSIVE_ENGINE_DATA = {
   provisioningModel: 'Regular',
   region: 'Netherlands (europe-west4)',
   commitedUse: '1 year',
-  totalCostPermonth: '$5,628.90'
+  totalCostPerMonth: '$5,628.90'
 }
