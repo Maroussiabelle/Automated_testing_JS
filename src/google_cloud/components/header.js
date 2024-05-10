@@ -5,7 +5,7 @@ export default class GoogleCloudHeader extends BaseComponent {
     super('header')
   }
 
-  get icon () {
+  get searchIcon () {
     return this.rootEl.$('input.mb2a7b')
   }
 

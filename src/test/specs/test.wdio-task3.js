@@ -5,6 +5,7 @@ import { CHEAP_ENGINE_DATA } from '../data/cheap-compute-engine-data.js'
 import { EXPENSIVE_ENGINE_DATA } from '../data/expensive-compute-engine-data.js'
 
 async function searchForItem (searchItem) {
+  await pages('start').header.searchIcon.click()
   await pages('start').header.inputBox.setValue(searchItem)
   await browser.keys(['Enter'])
 }
@@ -91,7 +92,6 @@ describe('WebDriver Task 3 suite', () => {
   })
 
   async function fillForm (inputData) {
-    await pages('start').header.icon.click()
     await searchForItem('Google Cloud Platform Pricing Calculator')
     await clickFirstSearchResult('Google Cloud Pricing Calculator')
     await clickAddToEstimateButton()
