@@ -69,6 +69,7 @@ async function openEstimateSummaryInNewTab () {
 }
 describe('WebDriver Task 3 suite', () => {
   beforeEach(async () => {
+    await browser.maximizeWindow()
     await pages('start').open()
     await pages('start').setCookiesLocalStorageItem()
   })
