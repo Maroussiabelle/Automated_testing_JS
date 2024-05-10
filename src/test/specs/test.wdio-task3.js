@@ -74,11 +74,6 @@ describe('WebDriver Task 3 suite', () => {
     await pages('start').setCookiesLocalStorageItem()
   })
 
-  it('Should open Google Cloud page @smoke', async () => {
-    await searchForItem('Google Cloud Platform Pricing Calculator')
-    await clickFirstSearchResult('Google Cloud Pricing Calculator')
-  })
-
   it('Should calculate Google Cloud cost - cheap engine', async () => {
     const sumOnFormTab = await fillForm(CHEAP_ENGINE_DATA)
     await browser.switchWindow('Google Cloud Estimate Summary')
@@ -95,6 +90,11 @@ describe('WebDriver Task 3 suite', () => {
     const actualSummaryData = await getActualSummaryData(EXPENSIVE_ENGINE_DATA)
 
     assertSummaryData(EXPENSIVE_ENGINE_DATA, { ...actualSummaryData, sumOnFormTab })
+  })
+
+  it('Should open Google Cloud page @smoke', async () => {
+    await searchForItem('Google Cloud Platform Pricing Calculator')
+    await clickFirstSearchResult('Google Cloud Pricing Calculator')
   })
 
   async function fillForm (inputData) {
