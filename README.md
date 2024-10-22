@@ -1,7 +1,7 @@
 # Automated_testing_JS
 
-New branches are created for home tasks:
+## The project contains my solutions of hometasks of Test Autoation is JS bootcamp.
 
-  -  Unit tests home task (Numbers validator)
-  -   UI tests home tasks (Pastebin and Google cloud)
+- Unit tests branch contains Unit tests home task (Numbers validator app)
+- UI tests branch contains UI tests home tasks (Pastebin and Google cloud)
 
